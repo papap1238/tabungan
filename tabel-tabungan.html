@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Tabungan Saya - Tabel Tabungan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet" />
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-purple-50 text-gray-800">
+    <!-- Header -->
+    <header class="flex items-center justify-between p-6 bg-purple-600 text-white">
+        <div class="flex items-center">
+            <span class="text-2xl font-bold">Tabunganku/span>
+        </div>
+        <nav class="flex space-x-6">
+            <a class="hover:text-gray-200" href="index.html">Pengisian</a>
+            <a class="hover:text-gray-200" href="tabel-tabungan.html">Tabel Tabungan</a>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="py-16 px-6">
+        <div class="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-6">
+            <h1 class="text-3xl font-bold text-center text-purple-600 mb-6">Tabel Tabungan</h1>
+
+            <!-- Tabel Tabungan -->
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white border border-gray-200">
+                    <thead class="bg-purple-100">
+                        <tr>
+                            <th class="px-4 py-2 border-b text-left text-purple-600">Tanggal</th>
+                            <th class="px-4 py-2 border-b text-left text-purple-600">Pemasukan</th>
+                            <th class="px-4 py-2 border-b text-left text-purple-600">Pengeluaran</th>
+                            <th class="px-4 py-2 border-b text-left text-purple-600">Keterangan</th>
+                            <th class="px-4 py-2 border-b text-left text-purple-600">Total</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabunganTable" class="text-gray-700">
+                        <!-- Rows will be dynamically added here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Total Tabungan -->
+            <div class="mt-6 text-right">
+                <span class="font-bold text-lg text-purple-600">Total Tabungan: </span>
+                <span id="totalTabungan" class="text-lg text-purple-800">Rp 0</span>
+            </div>
+
+            <!-- Button to go back to home -->
+            <div class="mt-8 text-center">
+                <a href="home.html">
+                    <button class="bg-purple-600 text-white px-6 py-3 rounded">
+                        Kembali ke Home
+                    </button>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Format angka ke Rupiah
+        function formatRupiah(angka) {
+            return "Rp " + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+
+        // Menampilkan data tabungan dari localStorage dan menghitung total
+        window.onload = function () {
+            let tabungan = JSON.parse(localStorage.getItem("tabunganData")) || [];
+            const tableBody = document.getElementById("tabunganTable");
+            let totalTabungan = 0;
+
+            // Loop untuk menambah baris pada tabel dan menghitung total
+            tabungan.forEach(item => {
+                const newRow = document.createElement("tr");
+                newRow.innerHTML = `
+                    <td class="px-4 py-2 border-b">${item.tanggal}</td>
+                    <td class="px-4 py-2 border-b">${formatRupiah(item.pemasukan)}</td>
+                    <td class="px-4 py-2 border-b">${formatRupiah(item.pengeluaran)}</td>
+                    <td class="px-4 py-2 border-b">${item.keterangan}</td>
+                    <td class="px-4 py-2 border-b">${formatRupiah(item.total)}</td>
+                `;
+                tableBody.appendChild(newRow);
+
+                // Tambahkan nilai total ke totalTabungan
+                totalTabungan += item.total;
+            });
+
+            // Tampilkan total tabungan
+            document.getElementById("totalTabungan").textContent = formatRupiah(totalTabungan);
+        }
+    </script>
+</body>
+
+</html>

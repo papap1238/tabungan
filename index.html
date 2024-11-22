@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Tabungan Saya - Pengisian</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet" />
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+
+<body class="bg-purple-50 text-gray-800">
+    <!-- Header -->
+    <header class="flex items-center justify-between p-6 bg-purple-600 text-white">
+        <div class="flex items-center">
+            <span class="text-2xl font-bold">Tabunganku</span>
+        </div>
+        <nav class="flex space-x-6">
+            <a class="hover:text-gray-200" href="index.html">Pengisian</a>
+            <a class="hover:text-gray-200" href="tabel-tabungan.html">Tabel Tabungan</a>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="py-16 px-6">
+        <div class="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-6">
+            <h1 class="text-3xl font-bold text-center text-purple-600 mb-6">Tabungan - Pengisian</h1>
+
+            <!-- Form Input -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                <input type="date" id="tanggal" class="border rounded px-4 py-2 w-full" placeholder="Tanggal" />
+                <input type="number" id="pemasukan" class="border rounded px-4 py-2 w-full" placeholder="Pemasukan" />
+                <input type="number" id="pengeluaran" class="border rounded px-4 py-2 w-full"
+                    placeholder="Pengeluaran" />
+                <input type="text" id="keterangan" class="border rounded px-4 py-2 w-full" placeholder="Keterangan" />
+                <button onclick="addRow()"
+                    class="bg-purple-600 text-white px-4 py-2 rounded-md hover:bg-purple-700 w-full col-span-1 md:col-span-4">
+                    Tambah
+                </button>
+            </div>
+
+            <!-- Button to go back to home -->
+            <div class="mt-8 text-center">
+                <a href="home.html">
+                    <button class="bg-purple-600 text-white px-6 py-3 rounded">
+                        Kembali ke Home
+                    </button>
+                </a>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        // Format angka ke Rupiah
+        function formatRupiah(angka) {
+            return "Rp " + angka.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+        }
+
+        function addRow() {
+            const tanggal = document.getElementById("tanggal").value;
+            const pemasukan = parseFloat(document.getElementById("pemasukan").value) || 0;
+            const pengeluaran = parseFloat(document.getElementById("pengeluaran").value) || 0;
+            const keterangan = document.getElementById("keterangan").value || "-";
+            const total = pemasukan - pengeluaran;
+
+            if (!tanggal) {
+                alert("Tanggal harus diisi!");
+                return;
+            }
+
+            // Simpan data di localStorage
+            let tabungan = JSON.parse(localStorage.getItem("tabunganData")) || [];
+            tabungan.push({ tanggal, pemasukan, pengeluaran, keterangan, total });
+            localStorage.setItem("tabunganData", JSON.stringify(tabungan));
+
+            // Clear inputs
+            document.getElementById("tanggal").value = '';
+            document.getElementById("pemasukan").value = '';
+            document.getElementById("pengeluaran").value = '';
+            document.getElementById("keterangan").value = '';
+        }
+    </script>
+</body>
+
+</html>
